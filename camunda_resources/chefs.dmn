@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_1cjqmoh" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+  <decision id="chefs" name="Chefs">
+    <decisionTable id="decisionTable_1" biodi:annotationsWidth="400">
+      <input id="input_1" label="Flavour" biodi:width="312">
+        <inputExpression id="inputExpression_1" typeRef="string" expressionLanguage="feel">
+          <text>flavour</text>
+        </inputExpression>
+      </input>
+      <output id="output_1" label="Chef" name="chef" typeRef="string" biodi:width="150" />
+      <rule id="DecisionRule_1m4vivi">
+        <inputEntry id="UnaryTests_1ev6jv1">
+          <text>"salami","Salami","schinken","Schinken"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08sj629">
+          <text>"Tony"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0co8auf">
+        <inputEntry id="UnaryTests_10y80ad">
+          <text>not("salami","Salami","schinken","Schinken")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1uajxa6">
+          <text>"Mario"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_0t2ivv0">
+      <dmndi:DMNShape id="DMNShape_03gytr6" dmnElementRef="chefs">
+        <dc:Bounds height="80" width="180" x="150" y="150" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,68 @@
+{% extends "_template.html" %}
+
+{% block body %}
+<h1>Pizza for Crypto!</h1>
+<h2>Your order summary</h2>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Flavour</td>
+            <td>{{ flavour }}</td>
+        </tr>
+        <tr>
+            <td>Size</td>
+            <td>{{ size }}</td>
+        </tr>
+        <tr>
+            <td>Delivery</td>
+            <td>{{ delivery }}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ email }}</td>
+        </tr>
+        <tr>
+            <td>Chef</td>
+            <td>{{ chef }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Ihre Bestell-Id</h3>
+<p class="font-italic text-justify">{{ pi_id }}</p>
+
+<div id="nano-button"></div>
+
+<form action="order-complete" method="post">
+    <input type="text" name="Payment ID" id="paymentID" placeholder="Payment ID" required>
+    <button type="submit" class="btn btn-primary" id="submit-btn">Weiter</button>
+</form>
+{% endblock %}
+
+{% block script%}
+<!-- Add the BrainBlocks script -->
+<script src="/static/js/brainblocks.js"></script>
+
+<!-- Render the payment button -->
+<script type="text/javascript">
+    // Render the Nano button
+    brainblocks.Button.render({
+
+        // Pass in payment options
+        payment: {
+            currency: 'eur',
+            amount: '0.01',
+            destination: 'nano_3bruhocg8yxkajibhdz1ojchcunxemdkdpfqn7bztdmcnf8nsrj757sjjbpt'
+        },
+
+        // Handle successful payments
+        onPayment: function (data) {
+            console.log(data)
+            document.getElementById("paymentID").value = data.token
+            // Display the Done button
+            document.getElementById("submit-btn").classList.remove("d-none");
+            document.getElementById("nano-button").classList.add("d-none");
+        }
+    }, '#nano-button');
+</script>
+{% endblock %}
