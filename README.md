@@ -49,6 +49,7 @@ Camunda sollte unter dieser Adresse erreichbar sein: [http://localhost:8080/camu
 - Installiere die Dependencies:
   - Wechsele in den Ordner worker `cd ./worker`
   - `npm i`
+- Kopiere die Datei "worker/.env.sample" und nenne sie "worker/.env"
 - Konfiguriere den E-Mail Server in der Datei "worker/.env"
   - (Dies ist optional. Ohne Konfiguration können jedoch keine Mails versandt werden.)
 - Starte den Worker
