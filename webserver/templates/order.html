@@ -31,7 +31,9 @@
 <h3>Ihre Bestell-Id</h3>
 <p class="font-italic text-justify">{{ pi_id }}</p>
 
-<div id="nano-button"></div>
+<!-- <div id="nano-button"></div> -->
+
+<div id="paypal-button-container"></div>
 
 <form action="order-complete" method="post">
     <input type="text" name="Payment ID" id="paymentID" placeholder="Payment ID" required>
@@ -41,10 +43,36 @@
 
 {% block script%}
 <!-- Add the BrainBlocks script -->
-<script src="/static/js/brainblocks.js"></script>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AZxh5cnIEd9nFnhglikfwcd-6gEQ1rjWEyeU5na6-feQBkazt_z6YPTWafemNE3oQxp7Vk50Fz8fCeg4"></script>
+
+<!-- Add the checkout buttons, set up the order and approve the order -->
+<script>
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '0.01'
+                    }
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                alert('Transaction completed by ' + details.payer.name.given_name);
+                console.log(details)
+            document.getElementById("paymentID").value = details.id
+            });
+        }
+    }).render('#paypal-button-container'); // Display payment options on your web page
+</script>
+
+
+<!-- <script src="/static/js/brainblocks.js"></script> -->
 
 <!-- Render the payment button -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     // Render the Nano button
     brainblocks.Button.render({
 
@@ -64,5 +92,5 @@
             document.getElementById("nano-button").classList.add("d-none");
         }
     }, '#nano-button');
-</script>
+</script> -->
 {% endblock %}

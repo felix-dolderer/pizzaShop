@@ -91,12 +91,35 @@ async function validation(task, taskService) {
     var pay_token = task.variables.get("paymentID");
     var vars = new Variables()
 
-    var valid = pay_token === "test"
+    // var valid = pay_token === "test"
 
-    vars.set('validPayment', valid)
+    var access_token = 'A21AAIOoLxiuw8-3izJELeEmA5Lmq8v_q8Va94ZAUHlRVaD8yvHBCHXLbqIm_kPB5e6DvFx6okEiwh1JCWvbXVt0f2tfr78BQ'
 
-    taskService.complete(task, vars)
+    var url = `https://api-m.sandbox.paypal.com/v2/checkout/orders/${pay_token}`
 
+    var axios = require('axios')
+    await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${access_token}`
+        }
+    })
+        .then(response => {
+            console.log(response.data)
+
+            var valid = response.data.status === 'COMPLETED'
+            vars.set('validPayment', valid)
+
+            taskService.complete(task, vars)
+        })
+        .catch(err => {
+            console.error(err);
+        })
+
+
+    // vars.set('validPayment', valid)
+
+    // taskService.complete(task, vars)
 
     // var url = "https://api.brainblocks.io/api/session/" + pay_token + "/verify";
 
