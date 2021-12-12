@@ -8,7 +8,7 @@ app.secret_key = secret_key
 
 headers = {
     'Content-Type': "application/json",
-    'Host': "localhost:8080"
+    'Host': "camunda:8080"
 }
 
 
@@ -39,13 +39,13 @@ def order():
         }
     }
 
-    pi_id_url = "http://localhost:8080/engine-rest/process-definition/key/PizzaShopProcess/start"
+    pi_id_url = "http://camunda:8080/engine-rest/process-definition/key/PizzaShopProcess/start"
     pi_id_response = requests.request(
         "POST", pi_id_url, data=json.dumps(payload), headers=headers)
     pi_id = pi_id_response.json()["id"]
     session['pi_id'] = pi_id
 
-    t_id_url = "http://localhost:8080/engine-rest/task/?processInstanceId=" + pi_id
+    t_id_url = "http://camunda:8080/engine-rest/task/?processInstanceId=" + pi_id
     t_id_response = requests.request("GET", t_id_url)
     t_id = t_id_response.json()[0]["id"]
     session['t_id'] = t_id
@@ -67,11 +67,11 @@ def order():
 def order_complete():
     payment_id = request.form['Payment ID']
     data = json.dumps({"value": payment_id, "type": "String"})
-    pay_id_url = "http://localhost:8080/engine-rest/process-instance/" + session['pi_id'] + "/variables/paymentID"
+    pay_id_url = "http://camunda:8080/engine-rest/process-instance/" + session['pi_id'] + "/variables/paymentID"
     response = requests.request("PUT", pay_id_url, headers=headers, data=data)
 
     t_id = session['t_id']
-    t_complete_url = "http://localhost:8080/engine-rest/task/" + t_id + "/complete"
+    t_complete_url = "http://camunda:8080/engine-rest/task/" + t_id + "/complete"
     t_complete_response = requests.request(
         "POST", t_complete_url, headers=headers)
 
@@ -79,4 +79,4 @@ def order_complete():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8082)
+    app.run(host = '0.0.0.0')
