@@ -1,7 +1,7 @@
 {% extends "_template.html" %}
 
 {% block body %}
-<h1>Pizza for Crypto!</h1>
+<h1>Pizza for Sale!</h1>
 <h2>Your order summary</h2>
 <table class="table">
     <tbody>
@@ -28,7 +28,7 @@
     </tbody>
 </table>
 
-<h3>Ihre Bestell-Id</h3>
+<h3>Your Order-Id</h3>
 <p class="font-italic text-justify">{{ pi_id }}</p>
 
 <!-- <div id="nano-button"></div> -->
@@ -37,7 +37,7 @@
 
 <form action="order-complete" method="post">
     <input type="text" name="Payment ID" id="paymentID" placeholder="Payment ID" required>
-    <button type="submit" class="btn btn-primary" id="submit-btn">Weiter</button>
+    <button type="submit" class="btn btn-primary" id="submit-btn">Continue</button>
 </form>
 {% endblock %}
 
@@ -67,30 +67,4 @@
         }
     }).render('#paypal-button-container'); // Display payment options on your web page
 </script>
-
-
-<!-- <script src="/static/js/brainblocks.js"></script> -->
-
-<!-- Render the payment button -->
-<!-- <script type="text/javascript">
-    // Render the Nano button
-    brainblocks.Button.render({
-
-        // Pass in payment options
-        payment: {
-            currency: 'eur',
-            amount: '0.01',
-            destination: 'nano_3bruhocg8yxkajibhdz1ojchcunxemdkdpfqn7bztdmcnf8nsrj757sjjbpt'
-        },
-
-        // Handle successful payments
-        onPayment: function (data) {
-            console.log(data)
-            document.getElementById("paymentID").value = data.token
-            // Display the Done button
-            document.getElementById("submit-btn").classList.remove("d-none");
-            document.getElementById("nano-button").classList.add("d-none");
-        }
-    }, '#nano-button');
-</script> -->
 {% endblock %}

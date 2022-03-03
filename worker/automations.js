@@ -27,8 +27,8 @@ client.subscribe('invalid-payment', async ({ task, taskService }) => {
   sendMail(
     task,
     taskService,
-    'Bestellung fehlgeschlagen',
-    'Die Bestellung kann leider nicht durchgeführt werden, da die Zahlung nicht bestätigt werden konnte.'
+    'Order failed',
+    'Your order could not be executed, because your payment could not be validated.'
   );
 });
 
@@ -38,8 +38,8 @@ client.subscribe('order-confirmation', async ({ task, taskService }) => {
   sendMail(
     task,
     taskService,
-    'Bestellung erfolgreich',
-    'Die Bestellung wurde erfolgreich empfangen und die Zahlung konnte bestätigt werden.'
+    'Order success',
+    'Your order was successfully placed and your payment successfully validated.'
   );
 });
 
@@ -49,8 +49,8 @@ client.subscribe('inform-customer', async ({ task, taskService }) => {
   sendMail(
     task,
     taskService,
-    'Lieferung ist unterwegs',
-    `Deine Pizza wurde eben von ${task.variables.get('chef')} zubereitet und ist jetzt auf dem Weg zu Dir.`
+    'Delivery on the way',
+    `Your pizza has been prepared by ${task.variables.get('chef')} and is on it's way to you.`
   );
 });
 
@@ -112,36 +112,17 @@ async function validation(task, taskService) {
 
   const url = `https://api-m.sandbox.paypal.com/v2/checkout/orders/${pay_token}`
 
-  const validationResponse = await axios.get(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${access_token}`
-    }
-  })
-  console.log(validationResponse.data)
-  const valid = validationResponse.data.status === 'COMPLETED'
-  vars.set('validPayment', valid)
+  try {
+    const validationResponse = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+      }
+    })
+    vars.set('validPayment', validationResponse.data.status === 'COMPLETED')
+  } catch(err) {
+    vars.set('validPayment', false)
+  }
 
   taskService.complete(task, vars)
-
-  // vars.set('validPayment', valid)
-
-  // taskService.complete(task, vars)
-
-  // var url = "https://api.brainblocks.io/api/session/" + pay_token + "/verify";
-
-  // await axios.get(url)
-  //     .then(response => {
-  //         console.log(response);
-
-  //         var vars = new Variables();
-  //         var valid = response.data.fulfilled;
-  //         vars.set('validPayment', valid);
-
-  //         taskService.complete(task, vars);
-  //     })
-  //     .catch(error => {
-  //         console.log(error);
-  //     });
-
 }
