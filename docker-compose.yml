@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  camunda:
+    image: camunda/camunda-bpm-platform:latest
+    ports:
+      - 8080:8080
+  webserver:
+    build: ./webserver
+    ports:
+      - 8082:5000
+  worker:
+    build: ./worker
